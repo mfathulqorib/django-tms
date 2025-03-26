@@ -14,8 +14,9 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+from .methods import get_env_variable
 
-load_dotenv()
+load_dotenv(override=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,8 +83,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": get_env_variable("PG_NAME"),
+        "USER": get_env_variable("PG_USER"),
+        "PASSWORD": get_env_variable("PG_PASSWORD"),
+        "HOST": get_env_variable("PG_HOST", "localhost"),
+        "PORT": get_env_variable("PG_PORT", "5432"),
     }
 }
 
@@ -137,7 +142,7 @@ STORAGES = {
     },
 }
 
-# SMTP Config for email auth
+# SMTP Config for email confirmation
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST")
@@ -145,3 +150,5 @@ EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS") == "True"
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+
