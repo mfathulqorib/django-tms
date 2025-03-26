@@ -56,7 +56,7 @@
 
                     <div class="mb-5" x-data="{ show: false }">
                         <label for="password" class="block mb-2 font-medium text-gray-700">Password</label>
-                        <div class="space-y-1">
+                        <div class="space-y-4">
                             <input
                                     x-bind:type="show ? 'text' : 'password'"
                                     id="password"
@@ -65,23 +65,22 @@
                                     class="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
                             >
-                            <label class="inline-flex items-center mt-2 text-sm text-gray-600">
-                                <input type="checkbox" x-model="show" class="mr-2">
-                                Show password
-                            </label>
-                        </div>
-                    </div>
 
-                    <div class="mb-5">
-                        <label for="password_revalidation" class="block mb-2 font-medium text-gray-700">Password Revalidation</label>
-                        <input
-                                type="password"
-                                id="password_revalidation"
-                                name="password_revalidation"
-                                placeholder="Re enter your password"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                required
-                        >
+                            <label for="password_revalidation"
+                                   class="block mb-2 font-medium text-gray-700">Confirm</label>
+                            <input
+                                    x-bind:type="show ? 'text' : 'password'"
+                                    id="password_revalidation"
+                                    name="password_revalidation"
+                                    placeholder="Confirm your password"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    required
+                            >
+                        </div>
+                        <label class="inline-flex items-center mt-2 text-sm text-gray-600">
+                            <input type="checkbox" x-model="show" class="mr-2">
+                            Show password
+                        </label>
                     </div>
 
                     <div class="bg-gray-50 border border-gray-200 border-l-4 border-l-blue-400 p-4 rounded mb-5 text-sm">
