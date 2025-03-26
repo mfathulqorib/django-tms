@@ -1,4 +1,5 @@
-from decouple import config
+import os
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,12 +7,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import View
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Create your views here.
@@ -31,44 +36,67 @@ class RegisterView(View):
         password = request.POST.get("password")
         password_revalidation = request.POST.get("password_revalidation")
         email = request.POST.get("email")
+
+        register_input = {"username": username, "email": email, "password": password}
+
         if password != password_revalidation:
             messages.error(request, "Your passwords didn't match, please try again.")
-            context = {"username": username, "email": email, "password": password}
-            return render(request, "register.html", context)
-        else:
-            new_user = User.objects.create_user(
-                username=username, email=email, password=password, is_active=False
-            )
+            return render(request, "register.html", register_input)
 
-            print(new_user)
-
-            # Send confirmation email
-            current_site = get_current_site(request)
-            uid = urlsafe_base64_encode(force_bytes(new_user.pk))
-            token = default_token_generator.make_token(new_user)
-            confirm_link = reverse("activate", kwargs={"uidb64": uid, "token": token})
-            activation_url = f"http://{current_site.domain}{confirm_link}"
-
-            subject = "Activate your account."
-            message = render_to_string(
-                "activation_email.html", {"activation_url": activation_url}
-            )
-            try:
-                send_mail(
-                    subject,
-                    message,
-                    config("EMAIL_HOST_USER"),
-                    [email],
-                    fail_silently=False,
-                    html_message=message,
+        existing_user = User.objects.filter(
+            Q(username__iexact=username) | Q(email__iexact=email)
+        ).first()
+        if existing_user:
+            if existing_user.username.lower() == username.lower():
+                messages.error(
+                    request, "Username already taken, please choose another one."
                 )
-                messages.success(
-                    request, "Please check your email to activate your account."
+            else:
+                messages.error(
+                    request, "Email already registered. Please choose another one."
                 )
-            except Exception as e:
-                messages.error(request, f"Failed to send confirmation email: {e}")
 
+            return render(request, "register.html", register_input)
+
+        new_user = User(username=username, email=email, is_active=False)
+        new_user.set_password(password)
+        new_user.save()
+
+        try:
+            self._send_activation_email(request, new_user)
             return redirect("login")
+        except Exception as e:
+            new_user.delete()
+            messages.error(request, f"Failed to send confirmation email: {e}")
+            return render(request, "register.html", register_input)
+
+    def _send_activation_email(self, request, new_user):
+        # Send confirmation email
+        current_site = get_current_site(request)
+        uid = urlsafe_base64_encode(force_bytes(new_user.pk))
+        token = default_token_generator.make_token(new_user)
+        confirm_link = reverse("activate", kwargs={"uidb64": uid, "token": token})
+        protocol = "https" if request.is_secure() else "http"
+        activation_url = f"{protocol}://{current_site.domain}{confirm_link}"
+
+        subject = "Activate your account."
+        message = render_to_string(
+            "activation_email.html", {"activation_url": activation_url}
+        )
+        try:
+            send_mail(
+                subject,
+                message,
+                os.getenv("EMAIL_HOST_USER"),
+                [new_user.email],
+                fail_silently=False,
+                html_message=message,
+            )
+            messages.success(
+                request, "Please check your email to activate your account."
+            )
+        except Exception as e:
+            messages.error(request, f"Failed to send confirmation email: {e}")
 
 
 class LoginView(View):
