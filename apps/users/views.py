@@ -149,4 +149,4 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "user"
 
     def get_object(self, queryset=None):
-        return self.request.user  # Mengambil user yang sedang login
+        return self.request.user  # Get logged user

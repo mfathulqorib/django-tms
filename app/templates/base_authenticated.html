@@ -8,6 +8,12 @@
                 <ul class="space-y-2">
                     {% if user.is_superuser %}
                         <li>
+                            <a href="{% url 'admin:index' %}"
+                               class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
+                                <span>🔑</span> <span>Admin</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{% url 'warehouse-list' %}"
                                class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
                                 <span>🏢</span> <span>Warehouse Management</span>

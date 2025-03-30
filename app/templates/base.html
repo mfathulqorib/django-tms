@@ -16,6 +16,7 @@
         <a href="{% url 'home' %}" class="font-bold text-lg hover:text-gray-300 transition">TMS</a>
         <div class="float-right">
             {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="ml-4 hover:text-gray-300 transition">Profile</a>
                 <a href="{% url 'logout' %}" class="ml-4 hover:text-gray-300 transition">Logout</a>
             {% else %}
                 <a href="{% url 'login' %}" class="ml-4 hover:text-gray-300 transition">Login</a>

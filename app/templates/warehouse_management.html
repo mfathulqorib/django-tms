@@ -1,4 +1,5 @@
 {% extends 'base_authenticated.html' %}
+{% load static %}
 
 {% block title %}
     Warehouse - TMS
@@ -10,12 +11,10 @@
         <!-- List Warehouse -->
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-xl font-bold">List of Warehouses</h2>
-            <a href="{% url 'create-warehouse' %}">
+            <a href="{% url 'detail-warehouse' %}">
                 <button class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-full shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                              clip-rule="evenodd"/>
+                    <svg class="h-5 w-5">
+                        <use xlink:href="{% static 'icons.svg' %}#plus-icon"></use>
                     </svg>
                     <span>Create Note</span>
                 </button>
@@ -33,13 +32,18 @@
             <tbody class="text-gray-700">
             {% for warehouse in warehouses %}
                 <tr class="border-b border-gray-200">
-                    <td class="py-3 px-6">{{ warehouse.name }}</td>
-                    <td class="py-3 px-6">{{ warehouse.address }}</td>
-                    <td class="py-3 px-6">{{ warehouse.geotag }}</td>
-                    <td class="py-3 px-6 text-center">
-                        <a href="#" class="text-blue-500 hover:underline">Edit</a>
-                        |
-                        <a href="#" class="text-red-500 hover:underline">Delete</a>
+                    <td class="py-3 px-6">{{ warehouse.warehouse_name }}</td>
+                    <td class="py-3 px-6">{{ warehouse.warehouse_address }}</td>
+                    <td class="py-3 px-6">{{ warehouse.warehouse_geotag }}</td>
+                    <td class="py-3 px-6 text-center flex items-center justify-center space-x-1">
+                        <button class="text-blue-500 hover:underline">
+                            <a href="{% url 'detail-warehouse' %}">Edit</a>
+                        </button>
+                        <span>|</span>
+                        <form method="post" action="{% url 'delete-warehouse' warehouse.id %}">
+                            {% csrf_token %}
+                            <button class="text-red-500 hover:underline">Delete</button>
+                        </form>
                     </td>
                 </tr>
             {% endfor %}

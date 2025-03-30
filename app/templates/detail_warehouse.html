@@ -1,5 +1,7 @@
 {% extends 'base_authenticated.html' %}
 
+{% load static %}
+
 {% block child_content %}
     <div class="container mx-auto p-6">
 
@@ -8,6 +10,14 @@
         <!-- List Warehouse -->
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-xl font-bold">Create Warehouse</h2>
+            <a href="{% url 'warehouse-list' %}">
+                <div class="flex items-center hover:bg-gray-300 transition rounded-lg py-1.5 px-2.5 space-x-1">
+                    <svg class="h-5 w-5">
+                        <use xlink:href="{% static 'icons.svg' %}#warehouse-icon"></use>
+                    </svg>
+                    <span>List Warehouses</span>
+                </div>
+            </a>
         </div>
 
         <!-- Form Input Warehouse -->
@@ -15,22 +25,25 @@
             {% csrf_token %}
             <div class="mb-4">
                 <label for="warehouse_name" class="block text-gray-700 text-sm font-bold mb-2">Warehouse Name</label>
-                <input id="warehouse_name" type="text" name="warehouse_name" required class="w-full p-2 border border-gray-300 rounded">
+                <input id="warehouse_name" type="text" name="warehouse_name" required
+                       class="w-full p-2 border border-gray-300 rounded">
             </div>
 
             <div class="mb-4">
                 <label for="warehouse_address" class="block text-gray-700 text-sm font-bold mb-2">Address</label>
-                <textarea id="warehouse_address" type="text" name="warehouse_address" required class="w-full p-2 border border-gray-300 rounded">
+                <textarea id="warehouse_address" type="text" name="warehouse_address" required
+                          class="w-full p-2 border border-gray-300 rounded">
                 </textarea>
             </div>
 
             <div class="mb-4">
                 <label for="warehouse_geotag" class="block text-gray-700 text-sm font-bold mb-2">Geolocation</label>
-                <input id="warehouse_geotag" type="text" name="warehouse_geotag" placeholder="Latitude, Longitude" required
+                <input id="warehouse_geotag" type="text" name="warehouse_geotag" placeholder="Latitude, Longitude"
+                       required
                        class="w-full p-2 border border-gray-300 rounded">
             </div>
 
-            <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600 rounded-full">
                 Add Warehouse
             </button>
         </form>
