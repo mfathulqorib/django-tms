@@ -1,11 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'base_authenticated.html' %}
 {% block title %}Home - TMS{% endblock %}
-{% block content %}
-    <h1 class="text-2xl font-bold">Welcome to Transport Management System</h1>
-    {% if user.is_authenticated %}
-        <p class="mt-4">Hello, {{ user.username }}!</p>
-    {% else %}
-        <p class="mt-4">Please <a href="{% url 'login' %}" class="text-blue-600">login</a> or <a
-                href="#{% url 'register' %}" class="text-blue-600">register</a>.</p>
-    {% endif %}
+{% block child_content %}
+    <!-- Main Content -->
+    <div class="flex-1 p-6">
+        <h1 class="text-2xl font-bold">Welcome to Transport Management System</h1>
+        {% if user.is_authenticated %}
+            <p class="mt-4">Hello, {{ user.username }}!</p>
+        {% else %}
+            <p class="mt-4">Please <a href="{% url 'login' %}" class="text-blue-600">login</a> or <a
+                    href="{% url 'register' %}" class="text-blue-600">register</a>.</p>
+        {% endif %}
+    </div>
 {% endblock %}
