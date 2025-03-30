@@ -13,6 +13,9 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView
+from apps.users.models import ProfileUser
 
 # Create your views here.
 class LoginView(View):
@@ -139,3 +142,11 @@ class ActivateAccountView(View):
         else:
             messages.error(request, "Invalid activation link.")
             return redirect("login")
+
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = ProfileUser
+    template_name = "profile.html"
+    context_object_name = "user"
+
+    def get_object(self, queryset=None):
+        return self.request.user  # Mengambil user yang sedang login

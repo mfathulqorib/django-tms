@@ -3,7 +3,7 @@
     <div class="flex h-screen mt-[60px]">
         {% if user.is_authenticated %}
             <!-- Sidebar -->
-            <div class="sidebar w-64 bg-gray-800 text-white p-4 space-y-4">
+            <div id="menu_sidebar" class="sidebar w-64 bg-gray-800 text-white p-4 space-y-4 sticky top-[60px] h-[calc(100vh-60px)]">
                 <h2 class="text-lg font-bold">Menu</h2>
                 <ul class="space-y-2">
                     {% if user.is_superuser %}

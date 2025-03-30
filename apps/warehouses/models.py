@@ -1,11 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
+from core.models import BaseModel
 
-class Warehouse(models.Model):
-    name = models.CharField(max_length=255)
-    address = models.TextField()
-    geotag = models.CharField(max_length=100)  # Format: "latitude,longitude"
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.name
+class Warehouse(BaseModel):
+    warehouse_name = models.CharField(max_length=255)
+    warehouse_address = models.TextField()
+    warehouse_geotag = models.CharField(max_length=100)  # Format: "latitude,longitude"

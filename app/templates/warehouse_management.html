@@ -1,68 +1,49 @@
 {% extends 'base_authenticated.html' %}
 
 {% block title %}
-	Warehouse - TMS
+    Warehouse - TMS
 {% endblock %}
 {% block child_content %}
-<div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4">Warehouse Management</h1>
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Warehouse Management</h1>
 
-{#    <!-- Form Input Warehouse -->#}
-{#    <form method="POST" action="{% url 'add_warehouse' %}" class="bg-white shadow-md rounded p-6 mb-6">#}
-{#        {% csrf_token %}#}
-{#        <div class="mb-4">#}
-{#            <label class="block text-gray-700 text-sm font-bold mb-2">Warehouse Name</label>#}
-{#            <input type="text" name="name" required class="w-full p-2 border border-gray-300 rounded">#}
-{#        </div>#}
-{##}
-{#        <div class="mb-4">#}
-{#            <label class="block text-gray-700 text-sm font-bold mb-2">Address</label>#}
-{#            <input type="text" name="address" required class="w-full p-2 border border-gray-300 rounded">#}
-{#        </div>#}
-{##}
-{#        <div class="mb-4">#}
-{#            <label class="block text-gray-700 text-sm font-bold mb-2">Geolocation</label>#}
-{#            <input type="text" name="geotag" placeholder="Latitude, Longitude" required class="w-full p-2 border border-gray-300 rounded">#}
-{#        </div>#}
-{##}
-{#        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">#}
-{#            Add Warehouse#}
-{#        </button>#}
-{#    </form>#}
-
-    <!-- List Warehouse -->
-<div class="flex items-center justify-between mb-4">
-    <h2 class="text-xl font-bold">List of Warehouses</h2>
-    <button class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-full shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-    </svg>
-    <span>Create Note</span>
-  </button>
-</div>
-    <table class="w-full bg-white shadow-md rounded">
-        <thead>
+        <!-- List Warehouse -->
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold">List of Warehouses</h2>
+            <a href="{% url 'create-warehouse' %}">
+                <button class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-full shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                              clip-rule="evenodd"/>
+                    </svg>
+                    <span>Create Note</span>
+                </button>
+            </a>
+        </div>
+        <table class="w-full bg-white shadow-md rounded">
+            <thead>
             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th class="py-3 px-6 text-left">Name</th>
                 <th class="py-3 px-6 text-left">Address</th>
                 <th class="py-3 px-6 text-left">Geotag</th>
                 <th class="py-3 px-6 text-center">Actions</th>
             </tr>
-        </thead>
-        <tbody class="text-gray-700">
+            </thead>
+            <tbody class="text-gray-700">
             {% for warehouse in warehouses %}
-            <tr class="border-b border-gray-200">
-                <td class="py-3 px-6">{{ warehouse.name }}</td>
-                <td class="py-3 px-6">{{ warehouse.address }}</td>
-                <td class="py-3 px-6">{{ warehouse.geotag }}</td>
-                <td class="py-3 px-6 text-center">
-                    <a href="#" class="text-blue-500 hover:underline">Edit</a>
-                    |
-                    <a href="#" class="text-red-500 hover:underline">Delete</a>
-                </td>
-            </tr>
+                <tr class="border-b border-gray-200">
+                    <td class="py-3 px-6">{{ warehouse.name }}</td>
+                    <td class="py-3 px-6">{{ warehouse.address }}</td>
+                    <td class="py-3 px-6">{{ warehouse.geotag }}</td>
+                    <td class="py-3 px-6 text-center">
+                        <a href="#" class="text-blue-500 hover:underline">Edit</a>
+                        |
+                        <a href="#" class="text-red-500 hover:underline">Delete</a>
+                    </td>
+                </tr>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
