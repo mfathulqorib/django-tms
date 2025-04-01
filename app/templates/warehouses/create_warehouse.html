@@ -26,7 +26,7 @@
             <div class="mb-4">
                 <label for="warehouse_name" class="block text-gray-700 text-sm font-bold mb-2">Warehouse Name</label>
                 <input id="warehouse_name" type="text" name="warehouse_name" required
-                       class="w-full p-2 border border-gray-300 rounded">
+                       class="w-full p-2 border border-gray-300 rounded", value="{{ warehouse_name|default_if_none:"" }}">
             </div>
 
             <div class="mb-4">
@@ -41,14 +41,16 @@
                         x-init="resize()"
                         @input="resize()"
                         class="w-full p-2 border border-gray-300 rounded"
-                ></textarea>
+                >{{ warehouse_address|default_if_none:"" }}</textarea>
             </div>
 
             <div class="mb-4">
                 <label for="warehouse_geotag" class="block text-gray-700 text-sm font-bold mb-2">Geolocation</label>
                 <input id="warehouse_geotag" type="text" name="warehouse_geotag" placeholder="Latitude, Longitude"
+                       class="w-full p-2 border border-gray-300 rounded"
+                       value="{{ warehouse_geotag|default_if_none:"" }}"
                        required
-                       class="w-full p-2 border border-gray-300 rounded">
+                >
             </div>
 
             <button type="submit" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600 rounded-full">

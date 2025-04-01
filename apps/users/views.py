@@ -2,6 +2,7 @@ import os
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -12,11 +13,12 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.views.generic import View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView
+from django.views.generic import DetailView, View
+
 from apps.users.models import ProfileUser
-from .forms import UserForm, ProfileForm
+
+from .forms import ProfileForm, UserForm
+
 
 # Create your views here.
 class LoginView(View):
@@ -47,6 +49,7 @@ class LoginView(View):
 
             return redirect(next_url)
 
+
 class RegisterView(View):
     def get(self, request):
         return render(request, "users/register.html")
@@ -66,6 +69,7 @@ class RegisterView(View):
         existing_user = User.objects.filter(
             Q(username__iexact=username) | Q(email__iexact=email)
         ).first()
+
         if existing_user:
             if existing_user.username.lower() == username.lower():
                 messages.error(
@@ -144,6 +148,7 @@ class ActivateAccountView(View):
             messages.error(request, "Invalid activation link.")
             return redirect("login")
 
+
 class ProfileDetailView(DetailView):
     template_name = "users/profile.html"
     context_object_name = "profile"
@@ -154,25 +159,32 @@ class ProfileDetailView(DetailView):
 
 class ProfileUpdateView(LoginRequiredMixin, View):
     def get(self, request):
-        profile = ProfileUser.objects.get(user = request.user )
+        profile = ProfileUser.objects.get(user=request.user)
         profile_form = ProfileForm(instance=profile)
         user_form = UserForm(instance=request.user)
 
         print(profile)
 
-
-        return render(request, "users/profile_edit.html", {"profile_form": profile_form, "user_form": user_form})
+        return render(
+            request,
+            "users/profile_edit.html",
+            {"profile_form": profile_form, "user_form": user_form},
+        )
 
     def post(self, request):
-        profile = ProfileUser.objects.get(user = request.user )
+        profile = ProfileUser.objects.get(user=request.user)
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=profile)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request,"Your account has been updated.")
+            messages.success(request, "Your account has been updated.")
             return redirect("profile")
         else:
-            messages.error(request,"An error occurred. Please check your inputs.")
-            return render(request, "users/profile_edit.html", {"profile_form": profile_form, "user_user":user_form})
+            messages.error(request, "An error occurred. Please check your inputs.")
+            return render(
+                request,
+                "users/profile_edit.html",
+                {"profile_form": profile_form, "user_user": user_form},
+            )
