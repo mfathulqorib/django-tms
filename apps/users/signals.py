@@ -11,3 +11,10 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+@receiver(post_save, sender=User)
+def update_profile_email(sender, instance, **kwargs):
+    """ Make sure profile.email same as user.email """
+    if hasattr(instance, 'email'): # make sure user have email
+        instance.profile.email = instance.email
+        instance.profile.save()

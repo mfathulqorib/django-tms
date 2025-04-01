@@ -16,11 +16,12 @@ from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from apps.users.models import ProfileUser
+from .forms import UserForm, ProfileForm
 
 # Create your views here.
 class LoginView(View):
     def get(self, request):
-        return render(request, "login.html")
+        return render(request, "users/login.html")
 
     def post(self, request):
         username = request.POST.get("username")
@@ -48,7 +49,7 @@ class LoginView(View):
 
 class RegisterView(View):
     def get(self, request):
-        return render(request, "register.html")
+        return render(request, "users/register.html")
 
     def post(self, request):
         username = request.POST.get("username")
@@ -60,7 +61,7 @@ class RegisterView(View):
 
         if password != password_revalidation:
             messages.error(request, "Your passwords didn't match, please try again.")
-            return render(request, "register.html", register_input)
+            return render(request, "users/register.html", register_input)
 
         existing_user = User.objects.filter(
             Q(username__iexact=username) | Q(email__iexact=email)
@@ -75,7 +76,7 @@ class RegisterView(View):
                     request, "Email already registered. Please choose another one."
                 )
 
-            return render(request, "register.html", register_input)
+            return render(request, "users/register.html", register_input)
 
         new_user = User(username=username, email=email, is_active=False)
         new_user.set_password(password)
@@ -87,7 +88,7 @@ class RegisterView(View):
         except Exception as e:
             new_user.delete()
             messages.error(request, f"Failed to send confirmation email: {e}")
-            return render(request, "register.html", register_input)
+            return render(request, "users/register.html", register_input)
 
     def _send_activation_email(self, request, new_user):
         # Send confirmation email
@@ -100,7 +101,7 @@ class RegisterView(View):
 
         subject = "Activate your account."
         message = render_to_string(
-            "activation_email.html", {"activation_url": activation_url}
+            "users/activation_email.html", {"activation_url": activation_url}
         )
         try:
             send_mail(
@@ -143,10 +144,35 @@ class ActivateAccountView(View):
             messages.error(request, "Invalid activation link.")
             return redirect("login")
 
-class ProfileDetailView(LoginRequiredMixin, DetailView):
-    model = ProfileUser
-    template_name = "profile.html"
-    context_object_name = "user"
+class ProfileDetailView(DetailView):
+    template_name = "users/profile.html"
+    context_object_name = "profile"
 
-    def get_object(self, queryset=None):
-        return self.request.user  # Get logged user
+    def get_object(self):
+        return self.request.user.profile
+
+
+class ProfileUpdateView(LoginRequiredMixin, View):
+    def get(self, request):
+        profile = ProfileUser.objects.get(user = request.user )
+        profile_form = ProfileForm(instance=profile)
+        user_form = UserForm(instance=request.user)
+
+        print(profile)
+
+
+        return render(request, "users/profile_edit.html", {"profile_form": profile_form, "user_form": user_form})
+
+    def post(self, request):
+        profile = ProfileUser.objects.get(user = request.user )
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request,"Your account has been updated.")
+            return redirect("profile")
+        else:
+            messages.error(request,"An error occurred. Please check your inputs.")
+            return render(request, "users/profile_edit.html", {"profile_form": profile_form, "user_user":user_form})

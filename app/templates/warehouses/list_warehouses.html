@@ -11,7 +11,7 @@
         <!-- List Warehouse -->
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-xl font-bold">List of Warehouses</h2>
-            <a href="{% url 'detail-warehouse' %}">
+            <a href="{% url 'create-warehouse' %}">
                 <button class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-full shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
                     <svg class="h-5 w-5">
                         <use xlink:href="{% static 'icons.svg' %}#plus-icon"></use>
@@ -20,7 +20,7 @@
                 </button>
             </a>
         </div>
-        <table class="w-full bg-white shadow-md rounded">
+        <table class="w-full bg-white shadow-md rounded mb-3">
             <thead>
             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th class="py-3 px-6 text-left">Name</th>
@@ -37,7 +37,7 @@
                     <td class="py-3 px-6">{{ warehouse.warehouse_geotag }}</td>
                     <td class="py-3 px-6 text-center flex items-center justify-center space-x-1">
                         <button class="text-blue-500 hover:underline">
-                            <a href="{% url 'detail-warehouse' %}">Edit</a>
+                            <a href="{% url 'detail-warehouse' warehouse.id %}">Edit</a>
                         </button>
                         <span>|</span>
                         <form method="post" action="{% url 'delete-warehouse' warehouse.id %}">
@@ -49,5 +49,12 @@
             {% endfor %}
             </tbody>
         </table>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-green-50 border border-green-200 text-green-700{% endif %} px-4 py-3 rounded mb-5 text-sm">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}
