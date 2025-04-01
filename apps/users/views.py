@@ -15,8 +15,6 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import DetailView, View
 
-from apps.users.models import ProfileUser
-
 from .forms import ProfileForm, UserForm
 
 
@@ -159,11 +157,8 @@ class ProfileDetailView(DetailView):
 
 class ProfileUpdateView(LoginRequiredMixin, View):
     def get(self, request):
-        profile = ProfileUser.objects.get(user=request.user)
-        profile_form = ProfileForm(instance=profile)
+        profile_form = ProfileForm(instance=request.user.profile)
         user_form = UserForm(instance=request.user)
-
-        print(profile)
 
         return render(
             request,
@@ -172,9 +167,8 @@ class ProfileUpdateView(LoginRequiredMixin, View):
         )
 
     def post(self, request):
-        profile = ProfileUser.objects.get(user=request.user)
+        profile_form = ProfileForm(request.POST, instance=request.user.profile)
         user_form = UserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=profile)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()

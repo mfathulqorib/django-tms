@@ -23,6 +23,7 @@
         <table class="w-full bg-white shadow-md rounded mb-3">
             <thead>
             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <th class="py-3 px-4 text-center">#</th>
                 <th class="py-3 px-6 text-left">Name</th>
                 <th class="py-3 px-6 text-left">Address</th>
                 <th class="py-3 px-6 text-left">Geotag</th>
@@ -32,6 +33,7 @@
             <tbody class="text-gray-700">
             {% for warehouse in warehouses %}
                 <tr class="border-b border-gray-200">
+                    <td class="py-3 px-4 text-center">{{ forloop.counter }}</td>
                     <td class="py-3 px-6">{{ warehouse.warehouse_name }}</td>
                     <td class="py-3 px-6">{{ warehouse.warehouse_address }}</td>
                     <td class="py-3 px-6">{{ warehouse.warehouse_geotag }}</td>

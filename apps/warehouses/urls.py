@@ -1,7 +1,11 @@
 from django.urls import path
 
-from apps.warehouses.views import (WarehouseCreateView, WarehouseDeleteView,
-                                   WarehouseListView, WarehouseUpdateView)
+from apps.warehouses.views import (
+    WarehouseCreateView,
+    WarehouseDeleteView,
+    WarehouseListView,
+    WarehouseUpdateView,
+)
 
 urlpatterns = [
     path("warehouses/", WarehouseListView.as_view(), name="warehouse-list"),

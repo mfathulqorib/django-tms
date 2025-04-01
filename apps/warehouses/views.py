@@ -2,10 +2,10 @@ from os import waitid_result
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView, View
-from django.db.models import Q
 
 from apps.warehouses.models import Warehouse
 
@@ -30,20 +30,30 @@ class WarehouseCreateView(LoginRequiredMixin, View):
 
     def post(self, request):
         warehouse_name = request.POST.get("warehouse_name").strip()
-        warehouse_address = request.POST.get("warehouse_address")
-        warehouse_geotag = request.POST.get("warehouse_geotag")
+        warehouse_address = request.POST.get("warehouse_address").strip()
+        warehouse_geotag = request.POST.get("warehouse_geotag").strip()
 
-        warehouse_input={"warehouse_name":warehouse_name, "warehouse_address":warehouse_address, "warehouse_geotag":warehouse_geotag}
+        warehouse_input = {
+            "warehouse_name": warehouse_name,
+            "warehouse_address": warehouse_address,
+            "warehouse_geotag": warehouse_geotag,
+        }
 
         existing_warehouse = Warehouse.objects.filter(
-            Q(warehouse_name__istartswith=warehouse_name) | Q(warehouse_geotag__istartswith=warehouse_geotag)
+            Q(warehouse_name__istartswith=warehouse_name)
+            | Q(warehouse_geotag__istartswith=warehouse_geotag)
         ).first()
 
         if existing_warehouse:
             if warehouse_name.lower() == existing_warehouse.warehouse_name.lower():
-                messages.error(request, "Nama gudang ini sudah terdaftar. Tolong periksa kembali.")
+                messages.error(
+                    request, "Nama gudang ini sudah terdaftar. Tolong periksa kembali."
+                )
             elif warehouse_geotag == existing_warehouse.warehouse_geotag:
-                messages.error(request, "Geotag gudang ini sudah terdaftar. Tolong periksa kembali.")
+                messages.error(
+                    request,
+                    "Geotag gudang ini sudah terdaftar. Tolong periksa kembali.",
+                )
 
             return render(request, "warehouses/create_warehouse.html", warehouse_input)
 
