@@ -36,9 +36,9 @@
                 <tr class="border-b border-gray-200">
                     <td class="py-3 px-4 text-center">{{ forloop.counter }}</td>
                     <td class="py-3 px-4">{{ warehouse.code }}</td>
-                    <td class="py-3 px-6">{{ warehouse.warehouse_name }}</td>
-                    <td class="py-3 px-6">{{ warehouse.warehouse_address }}</td>
-                    <td class="py-3 px-6">{{ warehouse.warehouse_geotag }}</td>
+                    <td class="py-3 px-6">{{ warehouse.name }}</td>
+                    <td class="py-3 px-6">{{ warehouse.address }}</td>
+                    <td class="py-3 px-6">{{ warehouse.geotag }}</td>
                     <td class="py-3 px-6 text-center flex items-center justify-center space-x-1">
                         <button class="text-blue-500 hover:underline">
                             <a href="{% url 'detail-warehouse' warehouse.id %}">Edit</a>

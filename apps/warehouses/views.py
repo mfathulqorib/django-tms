@@ -29,15 +29,15 @@ class WarehouseCreateView(LoginRequiredMixin, View):
 
     def post(self, request):
         code = request.POST.get("code").strip()
-        warehouse_name = request.POST.get("warehouse_name").strip()
-        warehouse_address = request.POST.get("warehouse_address").strip()
-        warehouse_geotag = request.POST.get("warehouse_geotag").strip()
+        name = request.POST.get("warehouse_name").strip()
+        address = request.POST.get("warehouse_address").strip()
+        geotag = request.POST.get("warehouse_geotag").strip()
 
         warehouse_input = {
             "code": code,
-            "warehouse_name": warehouse_name,
-            "warehouse_address": warehouse_address,
-            "warehouse_geotag": warehouse_geotag,
+            "warehouse_name": name,
+            "warehouse_address": address,
+            "warehouse_geotag": geotag,
             "actor": request.user,
         }
 
@@ -48,16 +48,16 @@ class WarehouseCreateView(LoginRequiredMixin, View):
 
         # Cek duplicated name/geotag
         existing_warehouse = Warehouse.objects.filter(
-            Q(warehouse_name__istartswith=warehouse_name)
-            | Q(warehouse_geotag__istartswith=warehouse_geotag)
+            Q(name__istartswith=name)
+            | Q(geotag__istartswith=geotag)
         ).first()
 
         if existing_warehouse:
-            if warehouse_name.lower() == existing_warehouse.warehouse_name.lower():
+            if name.lower() == existing_warehouse.name.lower():
                 messages.error(
                     request, "Nama gudang ini sudah terdaftar. Tolong periksa kembali."
                 )
-            elif warehouse_geotag == existing_warehouse.warehouse_geotag:
+            elif geotag == existing_warehouse.geotag:
                 messages.error(
                     request,
                     "Geotag gudang ini sudah terdaftar. Tolong periksa kembali.",
@@ -68,9 +68,9 @@ class WarehouseCreateView(LoginRequiredMixin, View):
         try:
             Warehouse(
                 code=code,
-                warehouse_name=warehouse_name,
-                warehouse_address=warehouse_address,
-                warehouse_geotag=warehouse_geotag,
+                name=name,
+                address=address,
+                geotag=geotag,
                 actor=request.user,
             ).save()
 
@@ -87,7 +87,7 @@ class WarehouseCreateView(LoginRequiredMixin, View):
 class WarehouseUpdateView(LoginRequiredMixin, UpdateView):
     model = Warehouse
     template_name = "warehouses/detail_warehouse.html"
-    fields = ["warehouse_name", "warehouse_address", "warehouse_geotag", "code"]
+    fields = ["name", "address", "geotag", "code"]
     context_object_name = "warehouse"
     pk_url_kwarg = "id"
     login_url = "/login/"
