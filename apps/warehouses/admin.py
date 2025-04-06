@@ -6,7 +6,7 @@ from apps.warehouses.models import Warehouse
 
 
 class WarehouseAdmin(admin.ModelAdmin):
-    list_display = ("id", "actor", "warehouse_name")
+    list_display = ("id", "code", "actor", "warehouse_name")
 
 
 admin.site.register(Warehouse, WarehouseAdmin)

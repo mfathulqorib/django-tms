@@ -1,4 +1,4 @@
-{% extends 'base_authenticated.html' %}
+{% extends 'core/base_authenticated.html' %}
 
 {% block title %}Profile - TMS{% endblock %}
 
@@ -23,11 +23,18 @@
 
         <div class="mb-4">
             <p class="text-gray-700 font-semibold">Warehouse Location:</p>
-            <p class="text-lg">{{ profile.warehouse_location | default_if_none:"-" }}</p>
+            <p class="text-lg">{{ profile.warehouse.warehouse_name | default_if_none:"-" }}</p>
+            <p class="text-lg">{{ profile.warehouse.warehouse_address | default_if_none:"-" }}</p>
+            <p class="text-blue-500 hover:underline">
+                <a href="https://www.google.com/maps?q={{ profile.warehouse.warehouse_geotag }}" target="_blank">
+                    {{ profile.warehouse.warehouse_geotag | default_if_none:"-" }}
+                </a>
+            </p>
         </div>
 
-        <button class="text-blue-500 hover:underline">
-            <a href="{% url 'profile_edit' %}">Edit</a>
-        </button>
+        <a href="{% url 'profile_edit' %}"
+           class="inline-block px-2.5 py-1 text-sm text-blue-500 border border-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition">
+            Edit
+        </a>
     </div>
 {% endblock %}

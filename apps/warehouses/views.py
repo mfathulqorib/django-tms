@@ -1,7 +1,6 @@
-from os import waitid_result
-
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import IntegrityError
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -19,7 +18,7 @@ class WarehouseListView(LoginRequiredMixin, ListView):
     login_url = "/login/"
 
     def get_queryset(self):
-        return Warehouse.objects.order_by("warehouse_name")
+        return Warehouse.objects.order_by("code")
 
 
 class WarehouseCreateView(LoginRequiredMixin, View):
@@ -29,16 +28,25 @@ class WarehouseCreateView(LoginRequiredMixin, View):
         return render(request, "warehouses/create_warehouse.html")
 
     def post(self, request):
+        code = request.POST.get("code").strip()
         warehouse_name = request.POST.get("warehouse_name").strip()
         warehouse_address = request.POST.get("warehouse_address").strip()
         warehouse_geotag = request.POST.get("warehouse_geotag").strip()
 
         warehouse_input = {
+            "code": code,
             "warehouse_name": warehouse_name,
             "warehouse_address": warehouse_address,
             "warehouse_geotag": warehouse_geotag,
+            "actor": request.user,
         }
 
+        # Cek duplicated code (primary key)
+        if Warehouse.objects.filter(code=code).exists():
+            messages.error(request, "Kode gudang ini sudah digunakan.")
+            return render(request, "warehouses/create_warehouse.html", warehouse_input)
+
+        # Cek duplicated name/geotag
         existing_warehouse = Warehouse.objects.filter(
             Q(warehouse_name__istartswith=warehouse_name)
             | Q(warehouse_geotag__istartswith=warehouse_geotag)
@@ -57,29 +65,29 @@ class WarehouseCreateView(LoginRequiredMixin, View):
 
             return render(request, "warehouses/create_warehouse.html", warehouse_input)
 
-        warehouse_input = {
-            "warehouse name": warehouse_name,
-            "warehouse address": warehouse_address,
-            "geotag": warehouse_geotag,
-            "actor": request.user,
-        }
+        try:
+            Warehouse(
+                code=code,
+                warehouse_name=warehouse_name,
+                warehouse_address=warehouse_address,
+                warehouse_geotag=warehouse_geotag,
+                actor=request.user,
+            ).save()
 
-        Warehouse(
-            warehouse_name=warehouse_name,
-            warehouse_address=warehouse_address,
-            warehouse_geotag=warehouse_geotag,
-            actor=request.user,
-        ).save()
+            messages.success(request, "Warehouse successfully created")
 
-        messages.success(request, "Warehouse successfully created")
+            return render(request, "warehouses/create_warehouse.html")
 
-        return render(request, "warehouses/create_warehouse.html", warehouse_input)
+        except IntegrityError as e:
+            messages.error(request, f"Error: {e}")
+
+            return render(request, "warehouses/create_warehouse.html", warehouse_input)
 
 
 class WarehouseUpdateView(LoginRequiredMixin, UpdateView):
     model = Warehouse
     template_name = "warehouses/detail_warehouse.html"
-    fields = ["warehouse_name", "warehouse_address", "warehouse_geotag"]
+    fields = ["warehouse_name", "warehouse_address", "warehouse_geotag", "code"]
     context_object_name = "warehouse"
     pk_url_kwarg = "id"
     login_url = "/login/"

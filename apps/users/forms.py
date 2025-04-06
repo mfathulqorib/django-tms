@@ -1,13 +1,21 @@
 from django import forms
 from django.contrib.auth.models import User
 
+from apps.warehouses.models import Warehouse
+
 from .models import ProfileUser
 
 
 class ProfileForm(forms.ModelForm):
+    warehouse = forms.ModelChoiceField(
+        queryset=Warehouse.objects.all(),
+        required=True,
+        label="warehouse location",
+    )
+
     class Meta:
         model = ProfileUser
-        fields = ["name", "warehouse_location"]
+        fields = ["name", "warehouse"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'core/base.html' %}
 {% block content %}
     <div class="flex h-screen mt-[60px]">
         {% if user.is_authenticated %}
@@ -23,7 +23,7 @@
                     <li>
                         <a href="# {# {% url 'delivery_routes' %} #}"
                            class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
-                            <span>📍</span> <span>Delivery Routes</span>
+                            <span>📍</span> <span>Assign Delivery</span>
                         </a>
                     </li>
                     <li>

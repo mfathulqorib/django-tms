@@ -1,4 +1,4 @@
-{% extends 'base_authenticated.html' %}
+{% extends 'core/base_authenticated.html' %}
 
 {% load static %}
 
@@ -28,6 +28,15 @@
                 <input id="warehouse_name" type="text" name="warehouse_name"
                        class="w-full p-2 border border-gray-300 rounded"
                        value="{{ warehouse.warehouse_name }}"
+                       required
+                >
+            </div>
+
+            <div class="mb-4">
+                <label for="warehouse_code" class="block text-gray-700 text-sm font-bold mb-2">Warehouse Code</label>
+                <input id="warehouse_code" type="text" name="code"
+                       class="w-full p-2 border border-gray-300 rounded"
+                       value="{{ warehouse.code }}"
                        required
                 >
             </div>
