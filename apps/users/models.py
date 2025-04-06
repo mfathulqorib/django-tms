@@ -3,7 +3,6 @@ from django.db import models
 
 from apps.warehouses.models import Warehouse
 from core.models import BaseModel
-from core.utils import generate_id
 
 
 # Create your models here.

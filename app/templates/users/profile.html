@@ -23,11 +23,11 @@
 
         <div class="mb-4">
             <p class="text-gray-700 font-semibold">Warehouse Location:</p>
-            <p class="text-lg">{{ profile.warehouse.warehouse_name | default_if_none:"-" }}</p>
-            <p class="text-lg">{{ profile.warehouse.warehouse_address | default_if_none:"-" }}</p>
+            <p class="text-lg">{{ profile.warehouse.name | default_if_none:"-" }}</p>
+            <p class="text-lg">{{ profile.warehouse.address | default_if_none:"-" }}</p>
             <p class="text-blue-500 hover:underline">
-                <a href="https://www.google.com/maps?q={{ profile.warehouse.warehouse_geotag }}" target="_blank">
-                    {{ profile.warehouse.warehouse_geotag | default_if_none:"-" }}
+                <a href="https://www.google.com/maps?q={{ profile.warehouse.geotag }}" target="_blank">
+                    {{ profile.warehouse.geotag | default_if_none:"-" }}
                 </a>
             </p>
         </div>

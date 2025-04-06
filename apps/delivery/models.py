@@ -16,7 +16,9 @@ class Delivery(BaseModel):
     is_delivered = models.BooleanField(default=False)
     delivery_address = models.TextField(max_length=155)
 
-    destination_warehouses = models.ManyToManyField(Warehouse, related_name="deliveries")
+    destination_warehouses = models.ManyToManyField(
+        Warehouse, related_name="deliveries"
+    )
 
     def __str__(self):
         return f"Delivery to {self.destination_warehouses.count()} warehouses"

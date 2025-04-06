@@ -3,9 +3,11 @@
     <div class="flex h-screen mt-[60px]">
         {% if user.is_authenticated %}
             <!-- Sidebar -->
-            <div id="menu_sidebar" class="sidebar w-64 bg-gray-800 text-white p-4 space-y-4 sticky top-[60px] h-[calc(100vh-60px)]">
+            <div id="menu_sidebar"
+                 class="sidebar w-64 bg-gray-800 text-white p-4 space-y-4 sticky top-[60px] h-[calc(100vh-60px)]">
                 <h2 class="text-lg font-bold">Menu</h2>
                 <ul class="space-y-2">
+
                     {% if user.is_superuser %}
                         <li>
                             <a href="{% url 'admin:index' %}"
@@ -19,23 +21,24 @@
                                 <span>🏢</span> <span>Warehouse Management</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{% url 'delivery-create' %}"
+                               class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
+                                <span>📝</span> <span>Create Delivery Order</span>
+                            </a>
+                        </li>
                     {% endif %}
+
                     <li>
-                        <a href="# {# {% url 'delivery_routes' %} #}"
+                        <a href="{% url 'delivery-list' %}"
                            class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
-                            <span>📍</span> <span>Assign Delivery</span>
+                            <span>🚚</span> <span>Delivery Order</span>
                         </a>
                     </li>
                     <li>
                         <a href="# {# {% url 'shipment_history' %} #}"
                            class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
                             <span>📜</span> <span>Shipment History</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="# {# {% url 'create_delivery_note' %} #}"
-                           class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
-                            <span>📝</span> <span>Create Delivery Note</span>
                         </a>
                     </li>
                 </ul>

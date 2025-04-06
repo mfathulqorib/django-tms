@@ -35,9 +35,9 @@ class WarehouseCreateView(LoginRequiredMixin, View):
 
         warehouse_input = {
             "code": code,
-            "warehouse_name": name,
-            "warehouse_address": address,
-            "warehouse_geotag": geotag,
+            "name": name,
+            "address": address,
+            "geotag": geotag,
             "actor": request.user,
         }
 
@@ -48,8 +48,7 @@ class WarehouseCreateView(LoginRequiredMixin, View):
 
         # Cek duplicated name/geotag
         existing_warehouse = Warehouse.objects.filter(
-            Q(name__istartswith=name)
-            | Q(geotag__istartswith=geotag)
+            Q(name__istartswith=name) | Q(geotag__istartswith=geotag)
         ).first()
 
         if existing_warehouse:
