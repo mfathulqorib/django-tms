@@ -22,17 +22,24 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{% url 'delivery-create' %}"
+                            <a href="{% url 'create-delivery' %}"
                                class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
                                 <span>📝</span> <span>Create Delivery Order</span>
                             </a>
                         </li>
                     {% endif %}
 
-                    <li>
-                        <a href="{% url 'delivery-list' %}"
+                    <li class="relative">
+                        <a href="{% url 'list-delivery' %}"
                            class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
                             <span>🚚</span> <span>Delivery Order</span>
+                            {% if undelivered_count > 0 %}
+
+                            <span
+                    class="absolute -top-2 -right-4 bg-red-500 text-white text-xs font-semibold rounded-full px-2 py-0.5">
+                    {{ undelivered_count }}
+                </span>
+                            {% endif %}
                         </a>
                     </li>
                     <li>

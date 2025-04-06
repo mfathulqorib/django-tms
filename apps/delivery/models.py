@@ -11,14 +11,16 @@ class Delivery(BaseModel):
         User, related_name="delivery_assigned", on_delete=models.CASCADE
     )
     date_assigned = models.DateTimeField(auto_now_add=True)
-    date_delivered = models.DateTimeField(auto_now=True)
-    estimated_time_arrival = models.DateTimeField(verbose_name="ETA")
-    is_delivered = models.BooleanField(default=False)
-    delivery_address = models.TextField(max_length=155)
-
+    date_delivered = models.DateTimeField(null=True, blank=True)
+    estimated_time_arrival = models.DateField(verbose_name="ETA")
+    delivery_notes = models.TextField(max_length=155, null=True, blank=True)
     destination_warehouses = models.ManyToManyField(
         Warehouse, related_name="deliveries"
     )
 
+    is_delivered = models.BooleanField(default=False)
+
     def __str__(self):
-        return f"Delivery to {self.destination_warehouses.count()} warehouses"
+        if self.pk:  # safe check
+            return f"Delivery to {self.destination_warehouses.count()} warehouses"
+        return "New Delivery"

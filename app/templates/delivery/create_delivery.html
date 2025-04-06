@@ -16,53 +16,66 @@
             <div>
                 <label for="person_assigned" class="block text-sm font-medium text-gray-700">Petugas Pengiriman</label>
                 <select name="person_assigned" id="person_assigned"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        class="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm">
+                    <option value="" {% if not input.person_assigned %} selected {% endif %} disabled hidden>Select PIC Delivery...</option>
                     {% for user in users %}
-                        <option value="{{ user.id }}">{{ user.username }}</option>
+                        <option value="{{ user.id }}" {% if input.person_assigned == user.id|stringformat:"s" %}
+                                selected {% endif %}>{{ user.username }}</option>
                     {% endfor %}
                 </select>
-            </div>
-
-            <!-- Delivery address -->
-            <div>
-                <label for="delivery_address" class="block text-sm font-medium text-gray-700">Alamat Pengiriman</label>
-                <textarea name="delivery_address" id="delivery_address" rows="2" maxlength="155"
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
             </div>
 
             <!-- ETA -->
             <div>
                 <label for="estimated_time_arrival" class="block text-sm font-medium text-gray-700">Estimasi Tiba
                     (ETA)</label>
-                <input type="datetime-local" name="estimated_time_arrival" id="estimated_time_arrival"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                <input type="date" name="estimated_time_arrival" id="estimated_time_arrival"
+                       class="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm"
+                       value="{{ input.estimated_time_arrival|default_if_none:"" }}">
             </div>
 
             <!-- Destination warehouses -->
             <div class="space-y-2">
-            <label for="destination_warehouses" class="block text-sm font-medium text-gray-700">Tujuan
+                <label for="destination_warehouses" class="block text-sm font-medium text-gray-700">Tujuan
                     Gudang</label>
                 {% for warehouse in warehouses %}
                     {% if profile.warehouse.name != warehouse.name %}
-                    <div class="flex items-center">
-                        <input type="checkbox" name="destination_warehouses" value="{{ warehouse.id }}"
-                               id="warehouse_{{ warehouse.id }}"
-                               class="h-4 w-4 text-blue-600 border-gray-300 rounded">
-                        <label for="warehouse_{{ warehouse.id }}" class="ml-2 block text-sm text-gray-700">
-                            {{ warehouse.name }}
-                        </label>
-                    </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" name="destination_warehouses" value="{{ warehouse.id }}"
+                                   id="warehouse_{{ warehouse.id }}"
+                                   class="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                                    {% if warehouse.id in input.destination_warehouses %}
+                                    	checked
+                                    {% endif %} >
+                            <label for="warehouse_{{ warehouse.id }}" class="ml-2 block text-sm text-gray-700">
+                                {{ warehouse.name }}
+                            </label>
+                        </div>
                     {% endif %}
                 {% endfor %}
+            </div>
+
+            <!-- Delivery notes -->
+            <div>
+                <label for="delivery_notes" class="block text-sm font-medium text-gray-700">Notes</label>
+                <textarea name="delivery_notes" id="delivery_notes" rows="2" maxlength="155"
+                          class="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm">{{ input.delivery_notes|default_if_none:"" }}</textarea>
             </div>
 
             <!-- Submit button -->
             <div>
                 <button type="submit"
                         class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                    Simpan Pengiriman
+                    Create Delivery Order
                 </button>
             </div>
         </form>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mt-2 {% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-green-50 border border-green-200 text-green-700{% endif %} px-4 py-3 rounded mb-5 text-sm">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}
