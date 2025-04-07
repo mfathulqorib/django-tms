@@ -27,41 +27,14 @@
         <!-- Form Input Warehouse -->
         <form method="post" class="bg-white shadow-md rounded p-6 mb-6">
             {% csrf_token %}
-            <div class="mb-4">
-                <label for="warehouse_name" class="block text-gray-700 text-sm font-bold mb-2">Warehouse Name</label>
-                <input id="warehouse_name" type="text" name="warehouse_name" required
-                       class="w-full p-2 border border-gray-300 rounded" value="{{ name|default_if_none:"" }}">
-            </div>
 
-            <div class="mb-4">
-                <label for="warehouse_code" class="block text-gray-700 text-sm font-bold mb-2">Warehouse Code</label>
-                <input id="warehouse_code" type="text" name="code" required
-                       class="w-full p-2 border border-gray-300 rounded" value="{{ code|default_if_none:"" }}">
-            </div>
+            {% include 'components/input.html' with id="warehouse_name" label="Warehouse Name" name="warehouse_name" value=name required=True %}
 
-            <div class="mb-4">
-                <label for="warehouse_address" class="block text-gray-700 text-sm font-bold mb-2">Address</label>
-                <textarea
-                        id="warehouse_address"
-                        type="text"
-                        name="warehouse_address"
-                        required
-                        rows="3"
-                        x-data="{ resize() { this.$el.style.height = 'auto'; this.$el.style.height = `${this.$el.scrollHeight}px`; } }"
-                        x-init="resize()"
-                        @input="resize()"
-                        class="w-full p-2 border border-gray-300 rounded"
-                >{{ address|default_if_none:"" }}</textarea>
-            </div>
+            {% include 'components/input.html' with id="warehouse_code" label="Warehouse Code" name="warehouse_code" value=code required=True %}
 
-            <div class="mb-4">
-                <label for="warehouse_geotag" class="block text-gray-700 text-sm font-bold mb-2">Geolocation</label>
-                <input id="warehouse_geotag" type="text" name="warehouse_geotag" placeholder="Latitude, Longitude"
-                       class="w-full p-2 border border-gray-300 rounded"
-                       value="{{ geotag|default_if_none:"" }}"
-                       required
-                >
-            </div>
+            {% include 'components/textarea.html' with id="warehouse_address" label="Address" name="warehouse_address" value=address required=True %}
+
+            {% include 'components/input.html' with id="warehouse_geotag" label="Geolocation" name="warehouse_geotag" placeholder="Latitude, Longitude" value=code required=True %}
 
             <button type="submit" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600 rounded-full">
                 Add Warehouse

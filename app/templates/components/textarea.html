@@ -1,0 +1,12 @@
+<div class="mb-4">
+    {% include 'components/label_input.html' with label=label %}
+    <textarea
+        id="{{ id }}"
+        name="{{ name }}"
+        rows="{{ rows|default:'3' }}"
+        {% if required %}required{% endif %}
+        class="w-full p-2 border border-gray-300 rounded resize-none {{ class|default:'' }}"
+        x-data="{ resize() { this.$el.style.height = 'auto'; this.$el.style.height = `${this.$el.scrollHeight}px`; } }"
+        x-init="resize()" @input="resize()"
+    >{{ value|default:'' }}</textarea>
+</div>

@@ -1,7 +1,5 @@
 <div class="mb-5">
-    <label for="{{ id }}" class="block mb-2 font-medium text-gray-700">
-        {{ label }}
-    </label>
+    {% include 'components/label_input.html' with label=label %}
     <input
         type="{{ type|default:'text' }}"
         id="{{ id }}"

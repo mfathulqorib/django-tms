@@ -28,7 +28,7 @@ class WarehouseCreateView(LoginRequiredMixin, View):
         return render(request, "warehouses/create_warehouse.html")
 
     def post(self, request):
-        code = request.POST.get("code").strip()
+        code = request.POST.get("warehouse_code").strip()
         name = request.POST.get("warehouse_name").strip()
         address = request.POST.get("warehouse_address").strip()
         geotag = request.POST.get("warehouse_geotag").strip()
