@@ -14,6 +14,8 @@
 
         {% include 'components/input/input.html' with id="email" label="Email" name="email" value=user.email required=True %}
 
+        {% include 'components/input/input.html' with id="fullname" label="Fullname" name="name" value=profile.name required=True %}
+
         {% include 'components/input/option.html' with id="warehouse_location" label="Warehouse Location" name="warehouse" options=warehouses option_value_attr="id" option_label_attr="name" input=profile.warehouse.id required=True %}
 
         <button type="submit"

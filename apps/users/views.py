@@ -173,6 +173,7 @@ class ProfileUpdateView(LoginRequiredMixin, View):
         username = request.POST.get("username")
         email = request.POST.get("email")
         warehouse_id = request.POST.get("warehouse")
+        name = request.POST.get("name")
 
         user = self.request.user
         profile = get_object_or_404(ProfileUser, user=user)
@@ -183,6 +184,7 @@ class ProfileUpdateView(LoginRequiredMixin, View):
         user.save()
 
         profile.warehouse = warehouse
+        profile.name = name
         profile.save()
 
         return redirect("profile")
