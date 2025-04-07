@@ -152,7 +152,7 @@ class ProfileDetailView(DetailView):
     context_object_name = "profile"
 
     def get_object(self):
-        return self.request.user.profile
+        return getattr(self.request.user, "profile", None)
 
 
 class ProfileUpdateView(LoginRequiredMixin, View):

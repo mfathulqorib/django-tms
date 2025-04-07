@@ -7,14 +7,14 @@
 
 {% block child_content %}
     <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-semibold text-gray-800 mb-6">📦 Delivery Order List</h1>
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6">📦 Shipment History</h1>
 
         <div class="flex flex-wrap gap-3">
             {% for delivery in delivery_list %}
-                {% if not delivery.is_delivered %}
-                    <div class="min-w-md bg-white shadow-md rounded-xl p-5 mb-2 border border-gray-200">
-                        <div class="flex justify-between items-start">
-                            <a href="{% url 'update-delivery' delivery.id %}">
+                {% if delivery.is_delivered %}
+                    <a href="{% url 'update-delivery-history' delivery.id %}">
+                        <div class="min-w-md bg-white shadow-md rounded-xl p-5 mb-2 border border-gray-200 flex justify-between items-start">
+                            <div>
                                 <p class="text-sm text-gray-500">📤 <span
                                         class="font-medium text-gray-700">Assigned by:</span> {{ delivery.actor }}</p>
                                 <p class="text-sm text-gray-500">📅 <span
@@ -23,14 +23,17 @@
                                 <p class="text-sm text-gray-500">⏳ <span
                                         class="font-medium text-gray-700">ETA:</span> {{ delivery.estimated_time_arrival|date:"d M Y H:i" }}
                                 </p>
+                                <p class="text-sm text-gray-500">📍 <span
+                                        class="font-medium text-gray-700">Delivery date:</span> {{ delivery.date_delivered|date:"d M Y H:i" }}
+                                </p>
                                 <p class="text-sm font-medium text-gray-700">Status: {% if delivery.is_delivered %}
                                     Done
                                 {% else %}
                                     Not Done
                                 {% endif %} </p>
-                            </a>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 {% endif %}
             {% empty %}
                 <div class="text-center text-gray-500">
