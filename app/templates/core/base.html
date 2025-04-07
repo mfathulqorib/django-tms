@@ -5,26 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Transport Management System for optimizing delivery and logistics.">
+    <meta name="keywords" content="logistics, delivery, management, warehouse, TMS">
+    <meta name="author" content="Your Company Name">
     <link rel="stylesheet" href="{% static 'output.css' %}">
     <title>{% block title %}Transport Management System{% endblock %}</title>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-gray-100 overscroll-none">
-<nav class="fixed top-0 left-0 w-screen bg-blue-600 p-4 text-white">
-    <div class="mx-5 flex items-center justify-between">
-        <a href="{% url 'home' %}" class="font-bold text-lg hover:text-gray-300 transition">TMS</a>
-        <div class="float-right">
-            {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}" class="ml-4 hover:text-gray-300 transition">Profile</a>
-                <a href="{% url 'logout' %}" class="ml-4 hover:text-gray-300 transition">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="ml-4 hover:text-gray-300 transition">Login</a>
-                <a href="{% url 'register' %}" class="ml-4 hover:text-gray-300 transition">Register</a>
-            {% endif %}
-        </div>
-    </div>
-</nav>
+    {% include 'components/navbar.html' %}
     {% block content %}{% endblock %}
 </body>
 </html>

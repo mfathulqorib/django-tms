@@ -1,0 +1,47 @@
+<div id="menu_sidebar" aria-label="Sidebar navigation"
+     class="sidebar w-64 bg-gray-800 text-white p-4 space-y-4 sticky top-[60px] h-[calc(100vh-60px)]">
+    <h2 class="text-lg font-bold">Menu</h2>
+    <ul class="space-y-2">
+
+        {% if user.is_superuser %}
+            <li>
+                <a href="{% url 'admin:index' %}"
+                   class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
+                    <span>🔑</span> <span>Admin</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'warehouse-list' %}"
+                   class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
+                    <span>🏢</span> <span>Warehouse Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'create-delivery' %}"
+                   class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
+                    <span>📝</span> <span>Create Delivery Order</span>
+                </a>
+            </li>
+        {% endif %}
+
+        <li class="relative">
+            <a href="{% url 'list-delivery' %}"
+               class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
+                <span>🚚</span> <span>Delivery Order</span>
+                {% if undelivered_count > 0 %}
+
+                    <span
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold rounded-full px-2 py-0.5">
+                    {{ undelivered_count }}
+                </span>
+                {% endif %}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'list-delivery-history' %}"
+               class="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
+                <span>📜</span> <span>Shipment History</span>
+            </a>
+        </li>
+    </ul>
+</div>
