@@ -2,6 +2,10 @@
 
 {% load static %}
 
+{% block title %}
+    Detail Warehouse - TMS
+{% endblock %}
+
 {% block child_content %}
     <div class="container mx-auto p-6">
 
@@ -12,7 +16,7 @@
             <h2 class="text-xl font-bold">Edit Warehouse</h2>
             <a href="{% url 'warehouse-list' %}">
                 <div class="flex items-center hover:bg-gray-300 transition rounded-lg py-1.5 px-2.5 space-x-1">
-                    <svg class="h-5 w-5">
+                    <svg class="h-5 w-5" aria-hidden="true">
                         <use xlink:href="{% static 'icons.svg' %}#warehouse-icon"></use>
                     </svg>
                     <span>List Warehouses</span>
@@ -53,7 +57,7 @@
                         x-init="resize()"
                         @input="resize()"
                         class="w-full p-2 border border-gray-300 rounded"
-                >{{ warehouse.address }}</textarea>
+                >{{ warehouse.address|default_if_none:"" }}</textarea>
             </div>
 
             <div class="mb-4">
@@ -66,16 +70,12 @@
             </div>
 
             <button type="submit" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600 rounded-full">
-                Save Warehous
+                Save Warehouse
             </button>
         </form>
-        {% if messages %}
-            {% for message in messages %}
-                <div class="{% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-green-50 border border-green-200 text-green-700{% endif %} px-4 py-3 rounded mb-5 text-sm">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+
+        {% include 'components/messages.html' %}
+
     </div>
 
 {% endblock %}

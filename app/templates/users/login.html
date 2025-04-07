@@ -17,11 +17,7 @@
                     files.</p>
 
                 <!-- Alert messages -->
-                {% for message in messages %}
-                    <div class="{% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-green-50 border border-green-200 text-green-700{% endif %} px-4 py-3 rounded mb-5 text-sm">
-                        {{ message }}
-                    </div>
-                {% endfor %}
+                {% include 'components/messages.html' %}
 
                 <!-- Login form -->
                 <form method="post" action="">
