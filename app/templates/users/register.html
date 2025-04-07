@@ -21,13 +21,13 @@
                 <form method="post" action="">
                     {% csrf_token %}
 
-                    {% include 'components/input.html' with label="Username" id="username" name="username" placeholder="Choose a username" value=username required=True %}
+                    {% include 'components/input/input.html' with label="Username" id="username" name="username" placeholder="Choose a username" value=username required=True %}
 
-                    {% include 'components/input.html' with label="Email" id="email" name="email" placeholder="Enter your email address" value=email required=True %}
+                    {% include 'components/input/input.html' with label="Email" id="email" name="email" placeholder="Enter your email address" value=email required=True %}
 
-                    {% include 'components/password_input.html' with label="Password" id="password" name="password" placeholder="Enter your password" %}
+                    {% include 'components/input/password_input.html' with label="Password" id="password" name="password" placeholder="Enter your password" %}
 
-                    {% include 'components/password_input.html' with label="Confirm" id="password_revalidation" name="password_revalidation" placeholder="Confirm password" %}
+                    {% include 'components/input/password_input.html' with label="Confirm" id="password_revalidation" name="password_revalidation" placeholder="Confirm password" %}
 
                     <div class="bg-gray-50 border border-gray-200 border-l-4 border-l-blue-400 p-4 rounded mb-5 text-sm">
                         <strong>Tip:</strong> Create a strong password with at least 8 characters including uppercase

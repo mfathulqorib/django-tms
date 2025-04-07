@@ -28,13 +28,13 @@
         <form method="post" class="bg-white shadow-md rounded p-6 mb-6">
             {% csrf_token %}
 
-            {% include 'components/input.html' with id="warehouse_name" label="Warehouse Name" name="warehouse_name" value=name required=True %}
+            {% include 'components/input/input.html' with id="warehouse_name" label="Warehouse Name" name="warehouse_name" value=name required=True %}
 
-            {% include 'components/input.html' with id="warehouse_code" label="Warehouse Code" name="warehouse_code" value=code required=True %}
+            {% include 'components/input/input.html' with id="warehouse_code" label="Warehouse Code" name="warehouse_code" value=code required=True %}
 
-            {% include 'components/textarea.html' with id="warehouse_address" label="Address" name="warehouse_address" value=address required=True %}
+            {% include 'components/input/textarea.html' with id="warehouse_address" label="Address" name="warehouse_address" value=address required=True %}
 
-            {% include 'components/input.html' with id="warehouse_geotag" label="Geolocation" name="warehouse_geotag" placeholder="Latitude, Longitude" value=code required=True %}
+            {% include 'components/input/input.html' with id="warehouse_geotag" label="Geolocation" name="warehouse_geotag" placeholder="Latitude, Longitude" value=code required=True %}
 
             <button type="submit" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600 rounded-full">
                 Add Warehouse

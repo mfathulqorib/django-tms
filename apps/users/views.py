@@ -1,4 +1,5 @@
 import os
+from urllib import request
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -14,6 +15,7 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import DetailView, View
+from apps.users.models import ProfileUser
 
 from .forms import ProfileForm, UserForm
 
@@ -182,3 +184,13 @@ class ProfileUpdateView(LoginRequiredMixin, View):
                 "users/profile_edit.html",
                 {"profile_form": profile_form, "user_user": user_form},
             )
+
+# class ProfileUpdateView(LoginRequiredMixin, View):
+#     login_url = "/login"
+#
+#     def get(self, request):
+#         user = self.request.user
+#         profile = ProfileUser.objects.get(user=user)
+#
+#         context = {"user": user, "profile": profile}
+#         return render(request, "users/profile_edit.html", context)

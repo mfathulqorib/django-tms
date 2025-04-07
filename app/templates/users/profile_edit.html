@@ -10,10 +10,12 @@
     <form method="post">
         {% csrf_token %}
 
-        <div class="mb-4">
-            <label for="id_username" class="block text-gray-700 font-semibold">Username</label>
-            {{ user_form.username }}
-        </div>
+        {% include 'components/input/input.html' with id="username" label="Username" name="username" value=user.username required=True %}
+
+        {% include 'components/input/input.html' with id="email" label="Email" name="email" value=user.email required=True %}
+
+        {% include 'components/input/input.html' with id="warehouse_location" label="Warehouse Location" name="warehouse" value=profile.warehouse required=True %}
+
 
         <div class="mb-4">
             <label for="id_email" class="block text-gray-700 font-semibold">Email</label>

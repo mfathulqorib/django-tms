@@ -21,7 +21,7 @@
                                         class="font-medium text-gray-700">Assigned date:</span> {{ delivery.date_assigned|date:"d M Y H:i" }}
                                 </p>
                                 <p class="text-sm text-gray-500">⏳ <span
-                                        class="font-medium text-gray-700">ETA:</span> {{ delivery.estimated_time_arrival|date:"d M Y H:i" }}
+                                        class="font-medium text-gray-700">ETA:</span> {{ delivery.estimated_time_arrival|date:"d M Y" }}
                                 </p>
                                 <p class="text-sm font-medium text-gray-700">Status: {% if delivery.is_delivered %}
                                     Done
