@@ -1,5 +1,4 @@
 import os
-from urllib import request
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -9,7 +8,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
@@ -18,7 +17,7 @@ from django.views.generic import DetailView, View
 
 from apps.users.models import ProfileUser
 
-from .forms import ProfileForm, UserForm
+from ..warehouses.models import Warehouse
 
 
 # Create your views here.
@@ -159,40 +158,32 @@ class ProfileDetailView(DetailView):
 
 
 class ProfileUpdateView(LoginRequiredMixin, View):
-    def get(self, request):
-        profile_form = ProfileForm(instance=request.user.profile)
-        user_form = UserForm(instance=request.user)
+    login_url = "/login"
 
-        return render(
-            request,
-            "users/profile_edit.html",
-            {"profile_form": profile_form, "user_form": user_form},
-        )
+    def get(self, request):
+        user = self.request.user
+        users = User.objects.all()
+        profile = get_object_or_404(ProfileUser, user=user)
+        warehouses = Warehouse.objects.all()
+
+        context = {"user": user, "users": users ,"profile": profile, "warehouses":warehouses}
+        return render(request, "users/profile_edit.html", context)
 
     def post(self, request):
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
-        user_form = UserForm(request.POST, instance=request.user)
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        warehouse_id = request.POST.get("warehouse")
 
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, "Your account has been updated.")
-            return redirect("profile")
-        else:
-            messages.error(request, "An error occurred. Please check your inputs.")
-            return render(
-                request,
-                "users/profile_edit.html",
-                {"profile_form": profile_form, "user_user": user_form},
-            )
+        user = self.request.user
+        profile = get_object_or_404(ProfileUser, user=user)
+        warehouse = get_object_or_404(Warehouse, id=warehouse_id)
 
+        user.username = username
+        user.email = email
+        user.save()
 
-# class ProfileUpdateView(LoginRequiredMixin, View):
-#     login_url = "/login"
-#
-#     def get(self, request):
-#         user = self.request.user
-#         profile = ProfileUser.objects.get(user=user)
-#
-#         context = {"user": user, "profile": profile}
-#         return render(request, "users/profile_edit.html", context)
+        profile.warehouse = warehouse
+        profile.save()
+
+        return redirect("profile")
+

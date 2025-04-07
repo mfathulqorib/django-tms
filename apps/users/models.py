@@ -10,7 +10,6 @@ class ProfileUser(BaseModel):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.EmailField(blank=True)
     warehouse = models.ForeignKey(
         Warehouse, on_delete=models.CASCADE, null=True, blank=True
     )
