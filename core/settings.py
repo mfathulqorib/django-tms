@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     "apps.warehouses",
     "apps.delivery",
     "debug_toolbar",
-    "huey.contrib.djhuey"
+    "huey.contrib.djhuey",
 ]
 
 MIDDLEWARE = [

@@ -1,13 +1,13 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
-from django.conf import settings
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
@@ -81,17 +81,23 @@ class RegisterView(View):
 
             return render(request, "users/register.html", register_input)
 
-        new_user = User(username=username, email=email, is_active=False)
+        new_user = User(username=username, email=email, is_active=True, is_staff=False)
         new_user.set_password(password)
         new_user.save()
 
-        try:
-            self._send_activation_email(request, new_user)
-            return redirect("login")
-        except Exception as e:
-            new_user.delete()
-            messages.error(request, f"Failed to send confirmation email: {e}")
-            return render(request, "users/register.html", register_input)
+        authenticate_user = authenticate(request, username=username, password=password)
+        login(request, authenticate_user)
+
+        # karena ada bug di production tidak mau connect ke smtp jadi di non aktifkan sementara
+        # try:
+        #     self._send_activation_email(request, new_user)
+        #     return redirect("login")
+        # except Exception as e:
+        #     new_user.delete()
+        #     messages.error(request, f"Failed to send confirmation email: {e}")
+        #     return render(request, "users/register.html", register_input)
+
+        return redirect("home")
 
     def _send_activation_email(self, request, new_user):
         # Send confirmation email
@@ -166,7 +172,12 @@ class ProfileUpdateView(LoginRequiredMixin, View):
         profile = get_object_or_404(ProfileUser, user=user)
         warehouses = Warehouse.objects.all()
 
-        context = {"user": user, "users": users ,"profile": profile, "warehouses":warehouses}
+        context = {
+            "user": user,
+            "users": users,
+            "profile": profile,
+            "warehouses": warehouses,
+        }
         return render(request, "users/profile_edit.html", context)
 
     def post(self, request):
@@ -188,4 +199,3 @@ class ProfileUpdateView(LoginRequiredMixin, View):
         profile.save()
 
         return redirect("profile")
-

@@ -4,6 +4,7 @@ from .models import ProfileUser
 
 # Register your models here.
 
+
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "name", "get_email")
 
