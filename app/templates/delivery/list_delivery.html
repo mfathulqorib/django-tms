@@ -12,9 +12,9 @@
         <div class="flex flex-wrap gap-3">
             {% for delivery in delivery_list %}
                 {% if not delivery.is_delivered %}
-                    <a href="{% url 'update-delivery' delivery.id %}">
-                        <div class="min-w-md bg-white shadow-md rounded-xl p-5 mb-2 border border-gray-200">
-                            <div class="flex justify-between items-start">
+                    <div class="min-w-md bg-white shadow-md rounded-xl p-5 mb-2 border border-gray-200">
+                        <div class="flex justify-between items-start">
+                            <a href="{% url 'update-delivery' delivery.id %}">
                                 <p class="text-sm text-gray-500"><span
                                         class="font-medium text-gray-700">Assigned by:</span> {{ delivery.actor }}</p>
                                 <p class="text-sm text-gray-500"><span
@@ -31,9 +31,9 @@
                                 {% else %}
                                     Not Done
                                 {% endif %} </p>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 {% endif %}
             {% empty %}
                 <div class="text-center text-gray-500">
