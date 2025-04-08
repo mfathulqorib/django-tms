@@ -7,9 +7,10 @@
 
     <div class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 mb-6">
         <div class="space-y-2 text-sm text-gray-700">
-            <p>📤 <span class="font-medium text-gray-600">Assigned by:</span> {{ delivery.actor }}</p>
-            <p>📅 <span class="font-medium text-gray-600">Assigned date:</span> {{ delivery.date_assigned|date:"d M Y H:i" }}</p>
-            <p>⏳ <span class="font-medium text-gray-600">ETA:</span> {{ delivery.estimated_time_arrival|date:"d M Y H:i" }}</p>
+            <p><span class="font-medium text-gray-600">Assigned by:</span> {{ delivery.actor }}</p>
+            <p><span class="font-medium text-gray-600">Assigned date:</span> {{ delivery.date_assigned|date:"d M Y H:i" }}</p>
+            <p><span class="font-medium text-gray-600">ETA:</span> {{ delivery.estimated_time_arrival|date:"d M Y" }}</p>
+            <p><span class="font-medium text-gray-600">Notes</span> {{ delivery.delivery_notes|default_if_none:"-" }}</p>
         </div>
     </div>
 
