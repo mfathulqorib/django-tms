@@ -24,6 +24,12 @@ class DeliveryListView(ListView, LoginRequiredMixin):
             person_assigned=self.request.user
         ).prefetch_related("destination_warehouses")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        delivery_list = context[self.context_object_name]
+        context["has_pending_delivery"] = delivery_list.filter(is_delivered=False).exists()
+
+        return context
 
 class DeliveryCreateView(LoginRequiredMixin, View):
     login_url = "/login/"
@@ -115,6 +121,13 @@ class HistoryDeliveryListView(ListView, LoginRequiredMixin):
         return Delivery.objects.filter(
             person_assigned=self.request.user
         ).prefetch_related("destination_warehouses")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        delivery_list = context[self.context_object_name]
+        context["has_done_delivery"] = delivery_list.filter(is_delivered=True).exists()
+
+        return context
 
 
 class HistoryDeliveryUpdateView(LoginRequiredMixin, UpdateView):
