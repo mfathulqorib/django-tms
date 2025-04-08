@@ -1,11 +1,10 @@
-import os
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
+from django.conf import settings
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
@@ -111,7 +110,7 @@ class RegisterView(View):
             send_mail(
                 subject,
                 message,
-                os.getenv("EMAIL_HOST_USER"),
+                settings.DEFAULT_FROM_EMAIL,
                 [new_user.email],
                 fail_silently=False,
                 html_message=message,
@@ -120,6 +119,7 @@ class RegisterView(View):
                 request, "Please check your email to activate your account."
             )
         except Exception as e:
+            new_user.delete()
             messages.error(request, f"Failed to send confirmation email: {e}")
 
 
