@@ -1,0 +1,53 @@
+<div class="bg-white shadow-md rounded-2xl p-6 border border-gray-200 mb-6">
+    <div class="space-y-3 text-sm text-gray-700">
+        <div class="grid grid-cols-3 gap-2">
+            <div>
+                <span class="font-medium text-gray-600">Assigned by:</span>
+                <p>{{ delivery.actor }}</p>
+            </div>
+            <div>
+                <span class="font-medium text-gray-600">Assigned date:</span>
+                <p>{{ delivery.date_assigned|date:"d M Y H:i" }}</p>
+            </div>
+            <div>
+                <span class="font-medium text-gray-600">ETA:</span>
+                <p>{{ delivery.estimated_time_arrival|date:"d M Y" }}</p>
+            </div>
+        </div>
+
+        <div class="pt-2">
+            <span class="font-medium text-gray-600">Notes:</span>
+            <p>{{ delivery.delivery_notes|default_if_none:"-" }}</p>
+        </div>
+
+        {% if delivery.is_delivered %}
+            <div class="pt-2">
+                <span class="font-medium text-gray-600">Delivery Date:</span>
+                <p>{{ delivery.date_delivered|date:"d M Y H:i" }}</p>
+            </div>
+        {% endif %}
+
+        <div class="pt-2">
+            <p class="font-medium text-gray-600 mb-2">Destination:</p>
+            <ul class="space-y-3">
+                {% for warehouse in delivery.destination_warehouses.all %}
+                    <li class="pl-3 border-l-2 border-blue-500">
+                        <p class="font-medium">{{ warehouse.name }}</p>
+                        <a href="https://www.google.com/maps?q={{ warehouse.geotag }}"
+                           target="_blank"
+                           class="text-blue-500 hover:underline flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                                 stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            {{ warehouse.geotag }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
